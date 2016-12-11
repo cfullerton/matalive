@@ -193,6 +193,7 @@
 				TargetAttributes = {
 					BC4441391DFDC622008E8D1C = {
 						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = T68566V8YJ;
 						ProvisioningStyle = Automatic;
 					};
 					BC44414D1DFDC622008E8D1C = {
@@ -410,6 +411,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = T68566V8YJ;
 				INFOPLIST_FILE = MLineDallas/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = connerfulerton.MLineDallas;
@@ -422,6 +424,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = T68566V8YJ;
 				INFOPLIST_FILE = MLineDallas/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = connerfulerton.MLineDallas;
