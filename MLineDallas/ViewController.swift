@@ -41,7 +41,22 @@ class ViewController: UIViewController, MKMapViewDelegate {
                 do {
                     
                     let parsedData = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:Any]
-                    
+                    for (key, value) in parsedData {
+                        print(type(of:value))
+                       
+                        if let item = value as? NSArray {
+                            // location of cars
+                            print();
+                            var carLocation = CLLocation(latitude: item[0] as! CLLocationDegrees, longitude: item[1] as! CLLocationDegrees)
+                            
+                            self.addRadiusCircle(location: carLocation)
+                        }
+                        else {
+                            // non array items ( html for amount in service)
+                            print("not an array")
+                        }
+                    }
+                   
                     
                 } catch let error as NSError {
                     print(error)
@@ -50,6 +65,22 @@ class ViewController: UIViewController, MKMapViewDelegate {
             
             }.resume()
     }
+    func addRadiusCircle(location: CLLocation){
+        self.mapView.delegate = self
+        let circle = MKCircle(center: location.coordinate, radius: 15 as CLLocationDistance)
+        self.mapView.add(circle)
+    }
+    func convertToDictionary(text: String) -> [String: Any]? {
+        if let data = text.data(using: .utf8) {
+            do {
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        return nil
+    }
+    
     let regionRadius: CLLocationDistance = 1000
     func centerMapOnLocation(location: CLLocation) {
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,regionRadius * 3.0, regionRadius * 3.0)
@@ -125,6 +156,12 @@ class ViewController: UIViewController, MKMapViewDelegate {
             polylineRenderer.strokeColor = UIColor.blue;
             polylineRenderer.lineWidth = 5
             return polylineRenderer
+        } else if overlay is MKCircle {
+            var circle = MKCircleRenderer(overlay: overlay)
+            circle.strokeColor = UIColor.red;
+            circle.fillColor = UIColor(red: 255, green: 0, blue: 0, alpha: 0.1)
+            circle.lineWidth = 1
+            return circle
         }
         
         return nil
