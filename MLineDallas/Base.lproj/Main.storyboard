@@ -22,24 +22,45 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Cza-6k-JFV">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="42" width="375" height="580"/>
                             </mapView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mckinny Ave. Trolleys" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tRz-7e-XyU">
+                                <rect key="frame" x="0.0" y="20" width="375" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Finding Trolleys..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="793-WC-FYE">
+                                <rect key="frame" x="121" y="630" width="133.5" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="29" id="lNn-Cr-iEj"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.45612046630000003" green="0.045208099160000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="Cza-6k-JFV" secondAttribute="trailing" id="B4q-vV-8f4"/>
-                            <constraint firstItem="Cza-6k-JFV" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="LFu-v2-2Ku"/>
-                            <constraint firstItem="Cza-6k-JFV" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="PMN-OR-hNb"/>
-                            <constraint firstItem="Cza-6k-JFV" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Rtw-SR-GPt"/>
+                            <constraint firstItem="tRz-7e-XyU" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="BA4-h6-NW7"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="793-WC-FYE" secondAttribute="bottom" constant="8" symbolic="YES" id="FLg-Bg-KMd"/>
+                            <constraint firstAttribute="trailing" secondItem="tRz-7e-XyU" secondAttribute="trailing" id="QeF-Xx-MY2"/>
+                            <constraint firstItem="793-WC-FYE" firstAttribute="top" secondItem="Cza-6k-JFV" secondAttribute="bottom" constant="8" symbolic="YES" id="Sh7-z6-Xmn"/>
+                            <constraint firstItem="tRz-7e-XyU" firstAttribute="leading" secondItem="Cza-6k-JFV" secondAttribute="leading" id="Ucb-KQ-3sV"/>
+                            <constraint firstItem="Cza-6k-JFV" firstAttribute="centerX" secondItem="793-WC-FYE" secondAttribute="centerX" id="mME-sT-Xs8"/>
+                            <constraint firstItem="tRz-7e-XyU" firstAttribute="trailing" secondItem="Cza-6k-JFV" secondAttribute="trailing" id="mNK-ht-5GS"/>
+                            <constraint firstItem="Cza-6k-JFV" firstAttribute="top" secondItem="tRz-7e-XyU" secondAttribute="bottom" constant="1" id="sl0-uM-miJ"/>
+                            <constraint firstItem="tRz-7e-XyU" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="xo9-ZS-8XW"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="inServiceLabel" destination="793-WC-FYE" id="KKK-Dd-dYs"/>
                         <outlet property="mapView" destination="Cza-6k-JFV" id="01t-9X-rtH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="136.80000000000001" y="137.18140929535232"/>
+            <point key="canvasLocation" x="-2.3999999999999999" y="194.75262368815595"/>
         </scene>
     </scenes>
 </document>

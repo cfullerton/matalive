@@ -11,27 +11,30 @@ import MapKit
 
 class ViewController: UIViewController, MKMapViewDelegate {
 
+    @IBOutlet weak var inServiceLabel: UILabel!
     @IBOutlet weak var mapView: MKMapView!
     override func viewDidLoad() {
         super.viewDidLoad()
         //after view loads
         mapView.delegate = self;
         mapView.isUserInteractionEnabled = false;
-        let initialLocation = CLLocation(latitude:32.793,longitude:-96.801);
-        centerMapOnLocation(location: initialLocation);
-        getTrollyLocations()
+        mapView.showsPointsOfInterest = false;
+        mapView.showsUserLocation = true;
+        getTrollyLocations();
+        var updateTimer = Timer.scheduledTimer(timeInterval: 30.0, target: self, selector: #selector(ViewController.getTrollyLocations), userInfo: nil, repeats: true)
+
     }
+    /*
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        getTrollyLocations();
+    }
+    */
     func getTrollyLocations(){
-       /* var request = URLRequest(url: URL(string: "http://track.mata.org:7170/allCars")!)
-        request.httpMethod = "GET"
-        let session = URLSession.shared
-        
-        session.dataTask(with: request) {data, response, err in
-          
-            }.resume()
-       */
-        
-        let urlString = "http://track.mata.org:7170/allCars"
+        let overlays = mapView.overlays
+        mapView.removeOverlays(overlays);
+        let initialLocation = CLLocation(latitude:32.799,longitude:-96.801);
+        centerMapOnLocation(location: initialLocation);
+        let urlString = "https://wvju16qd5k.execute-api.us-west-2.amazonaws.com/prod/trolley"
         
         let url = URL(string: urlString)
         URLSession.shared.dataTask(with:url!) { (data, response, error) in
@@ -41,12 +44,13 @@ class ViewController: UIViewController, MKMapViewDelegate {
                 do {
                     
                     let parsedData = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:Any]
+                    var totalTrolleys = 0;
                     for (key, value) in parsedData {
                         print(type(of:value))
                        
                         if let item = value as? NSArray {
                             // location of cars
-                            print();
+                            totalTrolleys += 1;
                             var carLocation = CLLocation(latitude: item[0] as! CLLocationDegrees, longitude: item[1] as! CLLocationDegrees)
                             
                             self.addRadiusCircle(location: carLocation)
@@ -56,7 +60,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
                             print("not an array")
                         }
                     }
-                   
+                    self.inServiceLabel.text = "\(totalTrolleys) Trolleys in service";
                     
                 } catch let error as NSError {
                     print(error)
@@ -83,7 +87,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
     
     let regionRadius: CLLocationDistance = 1000
     func centerMapOnLocation(location: CLLocation) {
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,regionRadius * 3.0, regionRadius * 3.0)
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,regionRadius * 2.8, regionRadius * 2.8)
         mapView.setRegion(coordinateRegion, animated: true)
         let locations = [CLLocation( latitude:32.801866,longitude:-96.800921),
                          CLLocation( latitude:32.807605,longitude:-96.797218),
@@ -154,12 +158,12 @@ class ViewController: UIViewController, MKMapViewDelegate {
         if overlay is MKPolyline {
             let polylineRenderer = MKPolylineRenderer(overlay: overlay)
             polylineRenderer.strokeColor = UIColor.blue;
-            polylineRenderer.lineWidth = 5
+            polylineRenderer.lineWidth = 2
             return polylineRenderer
         } else if overlay is MKCircle {
             var circle = MKCircleRenderer(overlay: overlay)
             circle.strokeColor = UIColor.red;
-            circle.fillColor = UIColor(red: 255, green: 0, blue: 0, alpha: 0.1)
+            circle.fillColor = UIColor(red: 255, green: 0, blue: 0, alpha: 1)
             circle.lineWidth = 1
             return circle
         }
