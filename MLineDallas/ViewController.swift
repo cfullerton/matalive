@@ -8,7 +8,11 @@
 
 import UIKit
 import MapKit
-
+extension Date {
+    func dayNumberOfWeek() -> Int? {
+        return Calendar.current.dateComponents([.weekday], from: self).weekday
+    }
+}
 class ViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet weak var inServiceLabel: UILabel!
@@ -34,8 +38,9 @@ class ViewController: UIViewController, MKMapViewDelegate {
         mapView.removeOverlays(overlays);
         let initialLocation = CLLocation(latitude:32.799,longitude:-96.801);
         centerMapOnLocation(location: initialLocation);
-        let urlString = "https://wvju16qd5k.execute-api.us-west-2.amazonaws.com/prod/trolley"
         
+        //get the cars
+        let urlString = "https://wvju16qd5k.execute-api.us-west-2.amazonaws.com/prod/trolley"
         let url = URL(string: urlString)
         URLSession.shared.dataTask(with:url!) { (data, response, error) in
             if error != nil {
@@ -45,6 +50,8 @@ class ViewController: UIViewController, MKMapViewDelegate {
                     
                     let parsedData = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:Any]
                     var totalTrolleys = 0;
+                    var trolleysRunning = self.checkTime();
+                    if (trolleysRunning == true){
                     for (key, value) in parsedData {
                         print(type(of:value))
                        
@@ -60,6 +67,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
                             print("not an array")
                         }
                     }
+                    }
                     self.inServiceLabel.text = "\(totalTrolleys) Trolleys in service";
                     
                 } catch let error as NSError {
@@ -69,6 +77,42 @@ class ViewController: UIViewController, MKMapViewDelegate {
             
             }.resume()
     }
+    func checkTime() -> Bool{                        //the values came from the trolley schedule
+        let date = Date()                            //the trolleys report as active and at the station as location
+        let calendar = Calendar.current;
+        let hour = calendar.component(.hour, from: date)
+        let minutes = calendar.component(.minute, from: date);
+        print(hour);
+        if (1 < date.dayNumberOfWeek()! && date.dayNumberOfWeek()! < 6){
+            if (hour < 7){
+                return false;
+            }
+            if (hour > 22){
+                return false;
+            }
+        }
+        if (date.dayNumberOfWeek()! == 6){ // Friday they go past midnight so no max
+            if (hour < 7){
+                return false;
+            }
+        }
+        if (date.dayNumberOfWeek()! == 7){ // Saturday has to include the past midnight section
+            if (minutes > 34 && hour < 10){
+                return false;
+            }
+        }
+        if (date.dayNumberOfWeek()! == 1){ // Sunday has to include the past midnight section
+            if (minutes > 34 && hour < 7){
+                return false;
+            }
+            if (hour > 22){
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
     func addRadiusCircle(location: CLLocation){
         self.mapView.delegate = self
         let circle = MKCircle(center: location.coordinate, radius: 15 as CLLocationDistance)
