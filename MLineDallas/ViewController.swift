@@ -28,11 +28,11 @@ class ViewController: UIViewController, MKMapViewDelegate {
         var updateTimer = Timer.scheduledTimer(timeInterval: 30.0, target: self, selector: #selector(ViewController.getTrollyLocations), userInfo: nil, repeats: true)
 
     }
-    /*
+    
     func applicationDidBecomeActive(_ application: UIApplication) {
         getTrollyLocations();
     }
-    */
+    
     func getTrollyLocations(){
         let overlays = mapView.overlays
         mapView.removeOverlays(overlays);
@@ -64,11 +64,11 @@ class ViewController: UIViewController, MKMapViewDelegate {
                         }
                         else {
                             // non array items ( html for amount in service)
-                            print("not an array")
                         }
                     }
+                        self.inServiceLabel.text = "\(totalTrolleys) Trolleys in service";
                     }
-                    self.inServiceLabel.text = "\(totalTrolleys) Trolleys in service";
+                    
                     
                 } catch let error as NSError {
                     print(error)
