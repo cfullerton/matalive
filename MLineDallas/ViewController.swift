@@ -23,14 +23,11 @@ class ViewController: UIViewController, MKMapViewDelegate {
         mapView.delegate = self;
         mapView.isUserInteractionEnabled = false;
         mapView.showsPointsOfInterest = false;
+        requestPermission();
         mapView.showsUserLocation = true;
         getTrollyLocations();
         var updateTimer = Timer.scheduledTimer(timeInterval: 30.0, target: self, selector: #selector(ViewController.getTrollyLocations), userInfo: nil, repeats: true)
 
-    }
-    
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        getTrollyLocations();
     }
     
     func getTrollyLocations(){
@@ -53,17 +50,18 @@ class ViewController: UIViewController, MKMapViewDelegate {
                     var trolleysRunning = self.checkTime();
                     if (trolleysRunning == true){
                     for (key, value) in parsedData {
-                        print(type(of:value))
-                       
                         if let item = value as? NSArray {
                             // location of cars
                             totalTrolleys += 1;
                             var carLocation = CLLocation(latitude: item[0] as! CLLocationDegrees, longitude: item[1] as! CLLocationDegrees)
+                            var carNumber = key;
+                            
                             
                             self.addRadiusCircle(location: carLocation)
                         }
                         else {
                             // non array items ( html for amount in service)
+                           
                         }
                     }
                         self.inServiceLabel.text = "\(totalTrolleys) Trolleys in service";
@@ -77,6 +75,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
             
             }.resume()
     }
+    
     func checkTime() -> Bool{                        //the values came from the trolley schedule
         let date = Date()                            //the trolleys report as active and at the station as location
         let calendar = Calendar.current;
@@ -131,7 +130,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
     
     let regionRadius: CLLocationDistance = 1000
     func centerMapOnLocation(location: CLLocation) {
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,regionRadius * 2.8, regionRadius * 2.8)
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,regionRadius * 3.4, regionRadius * 3.4)
         mapView.setRegion(coordinateRegion, animated: true)
         let locations = [CLLocation( latitude:32.801866,longitude:-96.800921),
                          CLLocation( latitude:32.807605,longitude:-96.797218),
@@ -208,12 +207,15 @@ class ViewController: UIViewController, MKMapViewDelegate {
             var circle = MKCircleRenderer(overlay: overlay)
             circle.strokeColor = UIColor.red;
             circle.fillColor = UIColor(red: 255, green: 0, blue: 0, alpha: 1)
-            circle.lineWidth = 1
+            circle.lineWidth = 1;
+            
             return circle
         }
         
         return nil
     }
-    
+    func requestPermission(){
+        CLLocationManager().requestWhenInUseAuthorization();
+    }
    }
 
