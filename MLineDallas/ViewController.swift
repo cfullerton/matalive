@@ -17,19 +17,30 @@ class ViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet weak var inServiceLabel: UILabel!
     @IBOutlet weak var mapView: MKMapView!
+    var locationManager = CLLocationManager();
     override func viewDidLoad() {
         super.viewDidLoad()
         //after view loads
+        locationManager.requestWhenInUseAuthorization();
         mapView.delegate = self;
         mapView.isUserInteractionEnabled = false;
         mapView.showsPointsOfInterest = false;
-        requestPermission();
         mapView.showsUserLocation = true;
         getTrollyLocations();
         var updateTimer = Timer.scheduledTimer(timeInterval: 30.0, target: self, selector: #selector(ViewController.getTrollyLocations), userInfo: nil, repeats: true)
-
+        
     }
-    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        switch status {
+        case .notDetermined:
+            locationManager.requestLocation()
+        case .authorizedAlways, .authorizedWhenInUse:
+            mapView.showsUserLocation = true;
+        default:
+            // Permission denied, do something else
+            print("denied");
+        }
+    }
     func getTrollyLocations(){
         let overlays = mapView.overlays
         mapView.removeOverlays(overlays);
@@ -214,8 +225,6 @@ class ViewController: UIViewController, MKMapViewDelegate {
         
         return nil
     }
-    func requestPermission(){
-        CLLocationManager().requestWhenInUseAuthorization();
-    }
+   
    }
 
